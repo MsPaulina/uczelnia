@@ -25,8 +25,8 @@ public class LanguageSchoolDatabaseMgmt {
         studentRepository.save(givenStudent);
     }
 
-    public void removeStudentFromDB(Student givenStudent) {
-        studentRepository.delete(givenStudent);
+    public void removeStudentFromDB(Long givenStudent) {
+        studentRepository.deleteById(givenStudent);
     }
 
     public Student getStudentByTheirID(Long givenID) {

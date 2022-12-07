@@ -18,6 +18,12 @@ public class RestControllerStudent {
 
     private LanguageSchoolDatabaseMgmt languageSchoolDatabaseMgmt;
 
+    @DeleteMapping("/deleteStudentFromDB/{id}")
+    public ResponseEntity deleteStudentFromDB(@PathVariable Long id){
+        languageSchoolDatabaseMgmt.removeStudentFromDB(id);
+        return ResponseEntity.ok("Student of id " + id + " has been removed.");
+    }
+
     @GetMapping("/getStudentById/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
@@ -82,6 +88,7 @@ public class RestControllerStudent {
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/myapi/getStudentById")
                 .path("/{id}")
+                .cloneBuilder()
                 .buildAndExpand(student.getStudentid())
                 .toUri();
 
