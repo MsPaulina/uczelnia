@@ -29,6 +29,24 @@ public class RestControllerStudent {
         return ResponseEntity.ok(languageSchoolDatabaseMgmt.getAllStudentsFromDB());
     }
 
+    @PutMapping("/updateStudentByID/{id}")
+    public ResponseEntity updateStudentByID(@RequestBody Student student, @PathVariable Long id) {
+
+        Optional<Student> studentOptional = Optional.ofNullable(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
+        if (studentOptional.isPresent()) {
+            Student updatedStudent = studentOptional.get();
+            updatedStudent.setCourse(student.getCourse());
+            updatedStudent.setStudentName(student.getStudentName());
+            updatedStudent.setStudentSurname(student.getStudentSurname());
+            languageSchoolDatabaseMgmt.addStudentToDB(updatedStudent);
+        } else {
+            languageSchoolDatabaseMgmt.addStudentToDB(student);
+        }
+
+        return ResponseEntity.ok("Student has been successfully updated in the DB");
+    }
+
+
     private Optional<Course> doesCourseExistInTheDatabase(Integer courseID) {
         return Optional.ofNullable(languageSchoolDatabaseMgmt.getCourseByID(courseID));
     }
@@ -49,8 +67,9 @@ public class RestControllerStudent {
             if(optionalCourse.isPresent()){
                 Course course = optionalCourse.get();
 
-                // create relationshiop = Bi-directional
+                // construct relationshiop = Bi-directional
                 course.addStudent(student);
+                //set course to the student
                 student.setCourse(course);
             }
             else{
