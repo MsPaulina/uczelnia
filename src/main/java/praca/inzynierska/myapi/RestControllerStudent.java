@@ -19,7 +19,7 @@ public class RestControllerStudent {
     private LanguageSchoolDatabaseMgmt languageSchoolDatabaseMgmt;
 
     @GetMapping("/getStudentById/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable String id) {
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
     }
 

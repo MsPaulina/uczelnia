@@ -29,7 +29,7 @@ public class LanguageSchoolDatabaseMgmt {
         studentRepository.delete(givenStudent);
     }
 
-    public Student getStudentByTheirID(String givenID) {
+    public Student getStudentByTheirID(Long givenID) {
         return studentRepository.findById(givenID).orElseGet(() -> null);
     }
 
@@ -37,7 +37,7 @@ public class LanguageSchoolDatabaseMgmt {
         return studentRepository.findAll();
     }
 
-    public void deleteStudentByID(String givenID) {
+    public void deleteStudentByID(Long givenID) {
         studentRepository.deleteById(givenID);
     }
 }
