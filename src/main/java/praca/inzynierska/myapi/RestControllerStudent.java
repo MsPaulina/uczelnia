@@ -66,16 +66,12 @@ public class RestControllerStudent {
 
         Optional<Integer> courseID = Optional.ofNullable(student.getCourse().getId());
 
-        // if course id exist check if course exist in database and then if it is true
-        // add student to property course if not save new student with new course
         if(courseID.isPresent()) {
             Optional<Course> optionalCourse = doesCourseExistInTheDatabase(courseID.get());
             if(optionalCourse.isPresent()){
                 Course course = optionalCourse.get();
 
-                // construct relationshiop = Bi-directional
                 course.addStudent(student);
-                //set course to the student
                 student.setCourse(course);
             }
             else{
@@ -83,7 +79,6 @@ public class RestControllerStudent {
                 student.setCourse(newCourse);
             }
         }
-        //adding to the database
         languageSchoolDatabaseMgmt.addStudentToDB(student);
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/myapi/getStudentById")

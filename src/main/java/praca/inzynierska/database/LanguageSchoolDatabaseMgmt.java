@@ -7,15 +7,11 @@ import praca.inzynierska.model.Student;
 import praca.inzynierska.repository.CourseRepository;
 import praca.inzynierska.repository.StudentRepository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 @Component
 @AllArgsConstructor
 public class LanguageSchoolDatabaseMgmt {
     private CourseRepository courseRepository;
     private StudentRepository studentRepository;
-
-    //Methods
 
     public Course getCourseByID(Integer givenID) {
         return courseRepository.findById(givenID).orElseGet(() -> null);
@@ -35,9 +31,5 @@ public class LanguageSchoolDatabaseMgmt {
 
     public Iterable<Student> getAllStudentsFromDB() {
         return studentRepository.findAll();
-    }
-
-    public void deleteStudentByID(Long givenID) {
-        studentRepository.deleteById(givenID);
     }
 }

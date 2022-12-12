@@ -1,8 +1,7 @@
 package praca.inzynierska.model;
-import java.util.Objects;
+import java.util.*;
 import javax.persistence.*;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 @Entity

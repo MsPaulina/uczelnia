@@ -1,13 +1,10 @@
 package praca.inzynierska.model;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import com.fasterxml.jackson.annotation.*;
-
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Getter;
 
 
 @Entity
@@ -23,11 +20,11 @@ public class Course {
 
     @Getter
     @Setter
-    private String name;
+    private String description;
 
     @Getter
     @Setter
-    private String description;
+    private String name;
 
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade=CascadeType.PERSIST)
     @Getter
