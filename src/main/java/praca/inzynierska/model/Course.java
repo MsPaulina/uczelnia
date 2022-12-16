@@ -16,7 +16,7 @@ public class Course {
     @JsonProperty("id")
     @Getter
     @Setter
-    private Integer id;
+    private Long id;
 
     @Getter
     @Setter
@@ -26,7 +26,7 @@ public class Course {
     @Setter
     private String name;
 
-    @OneToMany(mappedBy = "course", orphanRemoval = true, cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "course", orphanRemoval = true, cascade={CascadeType.PERSIST,CascadeType.MERGE})
     @Getter
     private final Set<Student> students = new HashSet<>();
 
@@ -37,5 +37,11 @@ public class Course {
 
     public void addStudent(Student student){
         students.add(student);
+        student.setCourse(this);
+    }
+
+    public void removeStudent(Student student){
+        students.remove(student);
+        student.setCourse(null);
     }
 }

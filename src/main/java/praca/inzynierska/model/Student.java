@@ -28,7 +28,7 @@ public class Student {
     @Getter
     private String studentSurname;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name="course_id")
     @Getter
     @Setter
@@ -40,6 +40,12 @@ public class Student {
         this.studentSurname = studentSurname;
         this.course = course;
     }
+    public Student(String languageschoolID, String studentName, String studentSurname) {
+        this.studentIDinLanguageSchool = languageschoolID;
+        this.studentName = studentName;
+        this.studentSurname = studentSurname;
+    }
+
 
     @Override
     public boolean equals(Object o) {

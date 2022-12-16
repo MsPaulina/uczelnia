@@ -1,14 +1,16 @@
 package praca.inzynierska.myapi;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import praca.inzynierska.database.LanguageSchoolDatabaseMgmt;
+//import praca.inzynierska.database.LanguageSchoolDatabaseMgmt;
 import praca.inzynierska.model.Course;
+import praca.inzynierska.model.CourseDTO;
 import praca.inzynierska.model.Student;
+import praca.inzynierska.model.StudentDTO;
+import praca.inzynierska.service.ApplicationService;
 
-import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -16,78 +18,78 @@ import java.util.Optional;
 @RequestMapping("/myapi")
 public class RestControllerStudent {
 
-    private LanguageSchoolDatabaseMgmt languageSchoolDatabaseMgmt;
+    @Autowired
+    ApplicationService applicationService;
 
-    @DeleteMapping("/deleteStudentFromDB/{id}")
-    public ResponseEntity deleteStudentFromDB(@PathVariable Long id){
-        languageSchoolDatabaseMgmt.removeStudentFromDB(id);
-        return ResponseEntity.ok("Student of id " + id + " has been removed.");
-    }
+//    private LanguageSchoolDatabaseMgmt languageSchoolDatabaseMgmt;
 
-    @GetMapping("/getStudentById/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
-    }
+//    @DeleteMapping("/deleteStudentFromDB/{id}")
+//    public ResponseEntity deleteStudentFromDB(@PathVariable Long id){
+////        languageSchoolDatabaseMgmt.removeStudentFromDB(id);
+//        return ResponseEntity.ok("Student of id " + id + " has been removed.");
+//    }
 
-    @GetMapping("/findAllStudentsInDatabase")
-    public ResponseEntity<Iterable<Student>> findAllBooksInLibrary() {
-        System.out.println("Method /findAllStudentsInDatabase was called!");
-        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getAllStudentsFromDB());
-    }
+//    @GetMapping("/getStudentById/{id}")
+//    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+//        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
+//    }
+
+//    @GetMapping("/findAllStudentsInDatabase")
+//    public ResponseEntity<Iterable<Student>> findAllBooksInLibrary() {
+//        System.out.println("Method /findAllStudentsInDatabase was called!");
+//        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getAllStudentsFromDB());
+//    }
 
     @PutMapping("/updateStudentByID/{id}")
-    public ResponseEntity updateStudentByID(@RequestBody Student student, @PathVariable Long id) {
+    public ResponseEntity updateStudentByID(@RequestBody StudentDTO studentDTO, @PathVariable Long id) {
 
-        Optional<Student> studentOptional = Optional.ofNullable(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
-        if (studentOptional.isPresent()) {
-            Student updatedStudent = studentOptional.get();
-            updatedStudent.setCourse(student.getCourse());
-            updatedStudent.setStudentName(student.getStudentName());
-            updatedStudent.setStudentSurname(student.getStudentSurname());
-            languageSchoolDatabaseMgmt.addStudentToDB(updatedStudent);
-        } else {
-            languageSchoolDatabaseMgmt.addStudentToDB(student);
-        }
+        String response = applicationService.updateStudentById(studentDTO, id);
+        return ResponseEntity.ok(response);
 
-        return ResponseEntity.ok("Student has been successfully updated in the DB");
+//
+//        Optional<Student> studentOptional = Optional.ofNullable(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
+//        if (studentOptional.isPresent()) {
+//            Student updatedStudent = studentOptional.get();
+//            updatedStudent.setCourse(student.getCourse());
+//            updatedStudent.setStudentName(student.getStudentName());
+//            updatedStudent.setStudentSurname(student.getStudentSurname());
+//            languageSchoolDatabaseMgmt.addStudentToDB(updatedStudent);
+//        } else {
+//            languageSchoolDatabaseMgmt.addStudentToDB(student);
+//        }
+//
+//        return ResponseEntity.ok("Student has been successfully updated in the DB");
     }
 
 
-    private Optional<Course> doesCourseExistInTheDatabase(Integer courseID) {
-        return Optional.ofNullable(languageSchoolDatabaseMgmt.getCourseByID(courseID));
-    }
+
+
+
+//    private Optional<Course> doesCourseExistInTheDatabase(Integer courseID) {
+//        return Optional.ofNullable(languageSchoolDatabaseMgmt.getCourseByID(courseID));
+//    }
 
     private Course createNewCourse(String name, String description) {
         return new Course(name,description);
     }
 
     @PostMapping(path = "/addNewStudent")
-    public ResponseEntity addNewStudent(@RequestBody Student student) {
+    public ResponseEntity addNewStudent(@RequestBody StudentDTO studentDTO) {
 
-        Optional<Integer> courseID = Optional.ofNullable(student.getCourse().getId());
+        String response = applicationService.createStudent(studentDTO);
 
-        if(courseID.isPresent()) {
-            Optional<Course> optionalCourse = doesCourseExistInTheDatabase(courseID.get());
-            if(optionalCourse.isPresent()){
-                Course course = optionalCourse.get();
 
-                course.addStudent(student);
-                student.setCourse(course);
-            }
-            else{
-                Course newCourse = createNewCourse(student.getCourse().getName(), student.getCourse().getDescription());
-                student.setCourse(newCourse);
-            }
-        }
-        languageSchoolDatabaseMgmt.addStudentToDB(student);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/myapi/getStudentById")
-                .path("/{id}")
-                .cloneBuilder()
-                .buildAndExpand(student.getStudentid())
-                .toUri();
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping(path = "/addNewCourse")
+    public ResponseEntity addNewCourse(@RequestBody CourseDTO courseDTO) {
+
+        String response = applicationService.createCourse(courseDTO);
+
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }
