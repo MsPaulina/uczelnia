@@ -15,7 +15,6 @@ public class StudentDTO {
 
     private String studentSurname;
 
-//    @JsonProperty(value="course")
     private Long courseId;
 
 }

@@ -37,7 +37,7 @@ public class ApplicationService {
         }
 
         studentRepository.save(student);
-        return "student was successfully created in DB";
+        return "Student został zapisany w bazie danych";
 
     }
 
@@ -47,10 +47,7 @@ public class ApplicationService {
                 courseDTO.getName(),
                 courseDTO.getDescription()
         );
-
         courseRepository.save(course);
-
-
         return "Kurs zapisany w bazie danych o podanym id: " + course.getId();
     }
 
@@ -124,11 +121,13 @@ public class ApplicationService {
         studentRepository.deleteById(givenStudent);
     }
 
+
     public Student getStudentByTheirID(Long givenID) {
-        return studentRepository.findById(givenID).orElseGet(() -> null);
+//        return studentRepository.findById(givenID).orElseGet(() -> null);
+             return studentRepository.findById(givenID).orElseGet(() -> null);
     }
 
-    public Iterable<Student> getAllStudentsFromDB() {
-        return studentRepository.findAll();
-    }
+//    public Iterable<Student> getAllStudentsFromDB() {
+//        return studentRepository.findAll();
+//    }
 }
