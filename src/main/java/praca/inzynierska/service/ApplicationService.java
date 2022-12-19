@@ -10,6 +10,7 @@ import praca.inzynierska.model.StudentDTO;
 import praca.inzynierska.repository.CourseRepository;
 import praca.inzynierska.repository.StudentRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -112,6 +113,12 @@ public class ApplicationService {
         }
     }
 
+    ///////////////////////////////////////
+
+    @Transactional
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
+    }
 
     public void removeStudentFromDB(Long givenStudent) {
         studentRepository.deleteById(givenStudent);

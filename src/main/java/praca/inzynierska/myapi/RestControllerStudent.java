@@ -11,7 +11,7 @@ import praca.inzynierska.model.Student;
 import praca.inzynierska.model.StudentDTO;
 import praca.inzynierska.service.ApplicationService;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -34,11 +34,20 @@ public class RestControllerStudent {
 //        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
 //    }
 
+
 //    @GetMapping("/findAllStudentsInDatabase")
 //    public ResponseEntity<Iterable<Student>> findAllBooksInLibrary() {
 //        System.out.println("Method /findAllStudentsInDatabase was called!");
 //        return ResponseEntity.ok(languageSchoolDatabaseMgmt.getAllStudentsFromDB());
 //    }
+
+    @GetMapping("/findAllStudents")
+    public ResponseEntity<Iterable<Student>> findAllStudents() {
+        System.out.println("Method /findAllStudentsInDatabase was called!");
+        List response = applicationService.getAllStudents();
+
+        return ResponseEntity.ok(response);
+    }
 
     @PutMapping("/updateStudentByID/{id}")
     public ResponseEntity updateStudentByID(@RequestBody StudentDTO studentDTO, @PathVariable Long id) {
@@ -62,15 +71,12 @@ public class RestControllerStudent {
     }
 
 
-
-
-
 //    private Optional<Course> doesCourseExistInTheDatabase(Integer courseID) {
 //        return Optional.ofNullable(languageSchoolDatabaseMgmt.getCourseByID(courseID));
 //    }
 
     private Course createNewCourse(String name, String description) {
-        return new Course(name,description);
+        return new Course(name, description);
     }
 
     @PostMapping(path = "/addNewStudent")
