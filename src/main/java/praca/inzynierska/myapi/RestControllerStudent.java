@@ -37,7 +37,6 @@ public class RestControllerStudent {
     public ResponseEntity<Iterable<Student>> findAllStudents() {
         System.out.println("Method /findAllStudentsInDatabase was called!");
         List response = applicationService.getAllStudents();
-
         return ResponseEntity.ok(response);
     }
 

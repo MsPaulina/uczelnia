@@ -37,7 +37,7 @@ public class ApplicationService {
         }
 
         studentRepository.save(student);
-        return "Student został zapisany w bazie danych";
+        return "Student został zapisany w bazie danych i zostało mu przypisane ID: " + student.getStudentid();
 
     }
 
@@ -55,28 +55,19 @@ public class ApplicationService {
     @Transactional
     public String updateStudentById(StudentDTO studentDTO, Long studentid) {
 
-//        Optional<Student> studentOptional = Optional.ofNullable(languageSchoolDatabaseMgmt.getStudentByTheirID(id));
-
         Student student = findStudentByID(studentid);
-//        Optional<Student> studentOptional = studentRepository.findById(studentid);
 
         Course course = null;
-        if(studentDTO.getCourseId()!= null){
+        if (studentDTO.getCourseId() != null) {
             course = findCourseByID(studentDTO.getCourseId());
             course.addStudent(student);
+        } else {
+            student.getCourse().removeStudent(student);
         }
-       else {
-           student.getCourse().removeStudent(student);
-//           course.removeStudent(student);
-        }
-//            student.setCourse(getCourse());
-            student.setStudentName(studentDTO.getStudentName());
-            student.setStudentSurname(studentDTO.getStudentSurname());
-            studentRepository.save(student);
-//            languageSchoolDatabaseMgmt.addStudentToDB(updatedStudent);
-//        } else {
-//            throw new RuntimeException("Nie ma uzytkownika o takim ID");
-//        }
+        student.setStudentName(studentDTO.getStudentName());
+        student.setStudentSurname(studentDTO.getStudentSurname());
+
+        studentRepository.save(student);
 
         return "studen zakualizowany/ o id: " + student.getStudentid();
     }
@@ -85,9 +76,7 @@ public class ApplicationService {
     private Course findCourseByID(Long courseID) {
         if (courseID == null) return null;
 
-
         Optional<Course> optionalCourse = courseRepository.findById(courseID);
-
 
         if (optionalCourse.isPresent()) {
             return optionalCourse.get();
@@ -96,12 +85,10 @@ public class ApplicationService {
         }
     }
 
-    private Student findStudentByID(Long studentID){
+    private Student findStudentByID(Long studentID) {
         if (studentID == null) return null;
 
-
         Optional<Student> optionalStudent = studentRepository.findById(studentID);
-
 
         if (optionalStudent.isPresent()) {
             return optionalStudent.get();
@@ -110,10 +97,8 @@ public class ApplicationService {
         }
     }
 
-    ///////////////////////////////////////
-
     @Transactional
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
@@ -123,11 +108,7 @@ public class ApplicationService {
 
 
     public Student getStudentByTheirID(Long givenID) {
-//        return studentRepository.findById(givenID).orElseGet(() -> null);
-             return studentRepository.findById(givenID).orElseGet(() -> null);
+        return studentRepository.findById(givenID).orElseGet(() -> null);
     }
 
-//    public Iterable<Student> getAllStudentsFromDB() {
-//        return studentRepository.findAll();
-//    }
 }
